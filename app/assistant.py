@@ -29,10 +29,13 @@ def ask(message: str, history: list[dict] | None = None) -> str:
         messages.extend(history)
     messages.append({"role": "user", "content": message})
 
-    response = client.chat.completions.create(
-        model=settings.openai_model,
-        messages=messages,
-        temperature=0.7,
-        max_tokens=1024,
-    )
-    return response.choices[0].message.content
+    try:
+        response = client.chat.completions.create(
+            model=settings.openai_model,
+            messages=messages,
+            temperature=0.7,
+            max_tokens=1024,
+        )
+        return response.choices[0].message.content
+    except Exception as e:
+        return f"Erro ao processar sua mensagem: {str(e)[:200]}"
